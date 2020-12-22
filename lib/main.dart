@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       cameras = await availableCameras();
       controller = CameraController(cameras[0], ResolutionPreset.medium);
+      await controller.initialize();
       return true;
     } catch (e) {
       return false;
@@ -72,7 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _cameraTakePictures() async {
-    await controller.initialize();
     await controller.takePicture().then((value) => this.imageFile = value);
     this.imageFile.saveTo('${this._storageDirectory.path}/saved.jpg');
     print("All Done");
@@ -82,7 +82,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       running = !running;
     });
-    print(running);
 
     if (running) {
       timer = Timer.periodic(Duration(seconds: 2), (timer) {
