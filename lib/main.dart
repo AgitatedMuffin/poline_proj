@@ -3,9 +3,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark));
+
   runApp(MaterialApp(
     initialRoute: '/',
     routes: {
@@ -74,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _cameraTakePictures() async {
     await controller.takePicture().then((value) => this.imageFile = value);
-    this.imageFile.saveTo('${this._storageDirectory.path}/saved.jpg');
+    this.imageFile.saveTo('${this._storageDirectory.path}/only.jpg');
     print("All Done");
   }
 
@@ -103,9 +108,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Hello Bomba"),
-      ),
       body: Container(
         alignment: Alignment.center,
         child: RaisedButton(
@@ -115,17 +117,11 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20),
           onPressed: () => {_cameraTakePictures()},
           child: Text(
-            "Click me",
-            style: TextStyle(fontSize: 20, color: Colors.white),
+            "Click me !",
+            style: TextStyle(
+                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _timerFunction(),
-        child: Text(
-          running ? 'Pause' : "Start",
-          textAlign: TextAlign.center,
         ),
       ),
     );
