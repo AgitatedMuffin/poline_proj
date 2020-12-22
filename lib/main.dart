@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -52,7 +53,8 @@ class _MyHomePageState extends State<MyHomePage> {
   bool didEverythingWork = true;
   XFile imageFile;
   Directory _storageDirectory;
-  bool state;
+  bool running;
+  Timer timer;
 
   Future<bool> _camerInit() async {
     try {
@@ -76,11 +78,26 @@ class _MyHomePageState extends State<MyHomePage> {
     print("All Done");
   }
 
+  _timerFunction() {
+    setState(() {
+      running = !running;
+    });
+    print(running);
+
+    if (running) {
+      timer = Timer.periodic(Duration(seconds: 2), (timer) {
+        print('I hate you');
+      });
+    } else {
+      if (timer != null) timer.cancel();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     setState(() {
-      state = false;
+      running = false;
     });
   }
 
@@ -103,6 +120,13 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(fontSize: 20, color: Colors.white),
             textAlign: TextAlign.center,
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _timerFunction(),
+        child: Text(
+          running ? 'Pause' : "Start",
+          textAlign: TextAlign.center,
         ),
       ),
     );
